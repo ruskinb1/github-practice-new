@@ -1,22 +1,30 @@
-name: Java CI with Maven
- 
-env:
-  NAME: 'My Action'
- 
+name: my_color_workflow
 on:
-  push:
-    branches: [ "main" ]
- 
+  workflow_dispatch:
+env:
+  favorite_color: orange
 jobs:
-  build:
-    env:
-        JAVA_VERSION: '11'
- 
+  my_color_1:
     runs-on: ubuntu-latest
- 
+    env:
+      favorite_color: blue
     steps:
-    - uses: actions/checkout@v3
-    - name: Print name
-      run: echo "Hello $NAME. $BUILD. Using Java Version $JAVA_VERSION"
-      env:
-        BUILD: 'We are currently running the Build job'
+      - name: Set the color
+        id: step_one
+        env:
+          favorite_color: green
+        run: |
+          echo "my_color=$favorite_color" >> "$GITHUB_ENV"
+      - name: echo the color
+        id: step_two
+        run: |
+          echo "🎉 My color is ${{ env.my_color }}"
+          echo "🎉 My favorite color is ${{ env.favorite_color }}"
+  my_color_2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo the color
+        id: step_one
+        run: |
+          echo "🎉 My color is ${{ env.my_color }}"
+          echo "🎉 My favorite color is ${{ env.favorite_color }}"
